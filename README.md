@@ -30,6 +30,11 @@ To build a RPM package manually
      }
  }
  ```
+ 4. Restart Nginx
+ ```sh
+ nginx -t
+ systemctl restart nginx
+ ```
  3. Test using curl
  ```sh
  curl http://localhost/status
