@@ -19,9 +19,8 @@ BuildRequires: libmaxminddb-devel
 %define epoch 1
 Epoch: %{epoch}
 %define os_minor %(lsb_release -rs | cut -d '.' -f 2)
-%if %{os_minor} >= 4
-#%define dist .el7_4
-%define dist .el7
+%if %{os_minor} <= 4
+define dist .el7_4
 %else
 %define dist .el7
 %endif
@@ -35,15 +34,13 @@ Epoch: %{epoch}
 
 Summary: nginx VTS dynamic modules
 Name: nginx-module-vts
-Version: 1.19.10
+Version: %{vts_version}
 Release: %{vts_version}%{?dist}.ngx
-#Vendor: Nginx, Inc.
-#URL: http://nginx.org/
+URL: https://github.com/vozlt/nginx-module-vts
 Group: %{_group}
 
 Source0: http://nginx.org/download/nginx-%{main_version}.tar.gz
-Source1: COPYRIGHT
-Source2: nginx-module-vts_master.zip
+Source1: nginx-module-vts_master.zip
 
 License: 2-clause BSD-like license
 
@@ -54,7 +51,7 @@ Requires: nginx == %{?epoch:%{epoch}:}%{main_version}-1%{?dist}.ngx
 BuildArch: %{build_arch}
 
 %description
-nginx VTS dynamic modules.
+Nginx virtual host traffic status module.
 
 %if 0%{?suse_version} || 0%{?amzn}
 %debug_package
@@ -69,7 +66,7 @@ nginx VTS dynamic modules.
 %prep
 %setup -qcTn %{name}-%{main_version}
 tar --strip-components=1 -zxf %{SOURCE0}
-unzip %{SOURCE2}
+unzip %{SOURCE1}
 
 %build
 ./configure %{BASE_CONFIGURE_ARGS} %{MODULE_CONFIGURE_ARGS} \
@@ -81,9 +78,6 @@ make %{?_smp_mflags} modules
 cd %{bdir}
 %{__rm} -rf $RPM_BUILD_ROOT
 %{__mkdir} -p $RPM_BUILD_ROOT%{_datadir}/doc/nginx-module-vts
-%{__install} -m 644 -p %{SOURCE1} \
-    $RPM_BUILD_ROOT%{_datadir}/doc/nginx-module-vts/
-
 
 
 %{__mkdir} -p $RPM_BUILD_ROOT%{_libdir}/nginx/modules
@@ -120,6 +114,5 @@ https://github.com/vozlt/nginx-module-vts
 BANNER
 fi
 
-#%changelog
-#* Wed Oct 13 12:01:25 UTC 2021
-#* varghese p mathew
+%changelog
+* Version 1 Wed Oct 13 12:01:25 UTC 2021 varghese p mathew
