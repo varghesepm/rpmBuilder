@@ -34,13 +34,14 @@ define dist .el7_4
 
 Summary: nginx VTS dynamic modules
 Name: nginx-module-vts
-Version: %{vts_version}
+Version: %{main_version}
 Release: %{vts_version}%{?dist}.ngx
 URL: https://github.com/vozlt/nginx-module-vts
 Group: %{_group}
 
 Source0: http://nginx.org/download/nginx-%{main_version}.tar.gz
 Source1: nginx-module-vts_master.zip
+Source2: COPYRIGHT
 
 License: 2-clause BSD-like license
 
@@ -78,6 +79,8 @@ make %{?_smp_mflags} modules
 cd %{bdir}
 %{__rm} -rf $RPM_BUILD_ROOT
 %{__mkdir} -p $RPM_BUILD_ROOT%{_datadir}/doc/nginx-module-vts
+%{__install} -m 644 -p %{SOURCE2} \
+    $RPM_BUILD_ROOT%{_datadir}/doc/nginx-module-vts/
 
 
 %{__mkdir} -p $RPM_BUILD_ROOT%{_libdir}/nginx/modules
